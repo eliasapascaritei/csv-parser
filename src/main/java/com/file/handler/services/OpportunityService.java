@@ -1,6 +1,7 @@
 package com.file.handler.services;
 
 import com.file.handler.dtos.OpportunityDto;
+import com.file.handler.models.Opportunity;
 import com.file.handler.repositories.OpportunityRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OpportunityService {
@@ -34,16 +36,21 @@ public class OpportunityService {
                                                  Optional<String> bookingType,
                                                  Optional<LocalDate> startDate,
                                                  Optional<LocalDate> endDate) {
-        List<OpportunityDto> opportunityDtoList = new ArrayList<>();
+        List<Opportunity> opportunityList = new ArrayList<>();
         String sqlQuery = generateRaqSqlQuery(team, product, bookingType, startDate, endDate);
-        opportunityDtoList = getBySql(entityManager, sqlQuery);
+        opportunityList = getBySql(entityManager, sqlQuery);
 
-        return opportunityDtoList;
+        return opportunityList
+                .stream()
+                .map(opportunity -> modelMapper.map(opportunity, OpportunityDto.class))
+                .collect(Collectors.toList());
     }
 
-    private List<OpportunityDto> getBySql(EntityManager entityManager,String sqlRaw){
-        Query query = entityManager.createNativeQuery(sqlRaw);
-        return query.getResultList();
+    private List<Opportunity> getBySql(EntityManager entityManager, String sqlRaw) {
+        Query query = entityManager.createNativeQuery(sqlRaw, Opportunity.class);
+        List<Opportunity> op = query.getResultList();
+
+        return op;
     }
 
     private String generateRaqSqlQuery(Optional<String> team,
