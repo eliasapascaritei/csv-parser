@@ -43,7 +43,7 @@ public class OpportunityService {
 
     private List<OpportunityDto> getBySql(EntityManager entityManager,String sqlRaw){
         Query query = entityManager.createNativeQuery(sqlRaw);
-         return query.getResultList();
+        return query.getResultList();
     }
 
     private String generateRaqSqlQuery(Optional<String> team,

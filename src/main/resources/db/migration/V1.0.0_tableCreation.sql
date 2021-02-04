@@ -8,7 +8,7 @@ CREATE TABLE opportunities(
     sales_organization varchar NOT NULL,
     team               varchar NOT NULL,
     product            varchar NOT NULL,
-    renewable          boolean NOT NULL
+    renewable          varchar NOT NULL
 );
 
 CREATE TABLE files_meta(

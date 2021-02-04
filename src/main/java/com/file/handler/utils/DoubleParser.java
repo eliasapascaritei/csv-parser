@@ -9,8 +9,8 @@ public class DoubleParser extends AbstractBeanField {
   @Override
   protected Double convert(String s) throws CsvDataTypeMismatchException, CsvConstraintViolationException {
     String amountCurrency = s
-        .replace(",", "")
-        .replaceAll("[^\\d.-]", "");
+            .replaceAll(",", "")
+            .replaceAll("\\$", "");
     return Double.parseDouble(amountCurrency);
   }
 

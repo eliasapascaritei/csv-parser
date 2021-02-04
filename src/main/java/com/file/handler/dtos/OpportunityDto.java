@@ -20,7 +20,7 @@ public class OpportunityDto {
     private String customerName;
 
     @CsvCustomBindByPosition(position = 1, converter = LocalDateParser.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private LocalDate bookingDate;
 
     @CsvBindByPosition(position = 2)

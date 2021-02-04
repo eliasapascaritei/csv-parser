@@ -5,6 +5,7 @@ import com.file.handler.dtos.OpportunityDto;
 import com.file.handler.services.OpportunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,7 +28,7 @@ public class OpportunityController {
     }
 
 
-    @RequestMapping(value = "/opportunity", method = RequestMethod.GET)
+    @RequestMapping(value = "/opportunity", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<OpportunityDto>> getOpportunities(@RequestParam(required = false) Optional<String> team,
                                                                  @RequestParam(required = false) Optional<String> product,
                                                                  @RequestParam(required = false) Optional<String> bookingType,

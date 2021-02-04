@@ -24,6 +24,6 @@ public class Opportunity implements Serializable {
     private String salesOrganization;
     private String team;
     private String product;
-    private boolean renewable;
+    private String renewable;
 
 }
