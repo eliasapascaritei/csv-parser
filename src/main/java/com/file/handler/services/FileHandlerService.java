@@ -48,15 +48,20 @@ public class FileHandlerService {
         fileOutputStream.write(multipartFile.getBytes());
 
         try {
-            uploadFileMetaData(file);
+            BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+            uploadFileMetaData(attributes, file.getName());
 
             List<OpportunityDto> opportunities = getOpportunitiesFromCSV(file);
             opportunities
                     .forEach(opportunityDto -> {
                         Opportunity opportunity = modelMapper.map(opportunityDto, Opportunity.class);
-                        if (!opportunityRepository.existsByOpportunityId(opportunity.getOpportunityId())) {
-                            opportunityRepository.save(opportunity);
-                        }
+                        String opportunityId = opportunityDto.getOpportunityId();
+                        boolean isDuplicate = opportunityRepository
+                                .findById(opportunityId)
+                                .isPresent();
+                        if (!isDuplicate)
+                            opportunityRepository
+                                    .save(opportunity);
                     });
         } finally {
             Files.delete(file.toPath());
@@ -86,9 +91,7 @@ public class FileHandlerService {
         return opportunities;
     }
 
-    private void uploadFileMetaData(File file) throws IOException {
-        BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-        String fileName = file.getName();
+    private void uploadFileMetaData(BasicFileAttributes attr, String fileName) {
         Long fileSize = attr.size();
         LocalDateTime creationFileDate = LocalDateTime.ofInstant(
                 attr.creationTime().toInstant(),
